@@ -16,10 +16,10 @@ add_executable(${PROJECT_NAME} ${src_file})
 
 
 
-get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
-foreach(dir ${dirs})
-  message(STATUS "dir='${dir}'")
-endforeach()
+# get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
+# foreach(dir ${dirs})
+#   message(STATUS "dir='${dir}'")
+# endforeach()
 
 target_include_directories(${PROJECT_NAME} PRIVATE "include;")
 target_link_libraries(${PROJECT_NAME} debug ${CMAKE_SOURCE_DIR}/VUFS/lib/x64/Debug/VUFS.lib)
