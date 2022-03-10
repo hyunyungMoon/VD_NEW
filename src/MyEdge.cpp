@@ -6,8 +6,7 @@ MyEdge::MyEdge(){
 
 
 MyEdge::MyEdge(rg_Point2D vector){
-    
-    m_direction = true;
+
     m_vector = vector;
 }
 

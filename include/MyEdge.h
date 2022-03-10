@@ -8,7 +8,7 @@ class MyEdge : public WingedEdgeDataStructure::Edge {
     
 private:      
     rg_Point2D m_vector;
-    bool m_direction;
+    bool m_direction = true;
    
 public:    
     MyEdge();
