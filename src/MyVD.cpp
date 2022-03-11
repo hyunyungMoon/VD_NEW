@@ -7,7 +7,7 @@ MyVD::MyVD(){
 
 MyVD::MyVD(string file_name){
 
-    read_generator_txt_file(file_name);
+    read_generator_txt_file_and_make_face(file_name);
     
     make_vertex_and_edge_by_making_inner_circle();
     
@@ -15,14 +15,42 @@ MyVD::MyVD(string file_name){
     
     make_relationship_of_face();
     
-    //make boundary and calculate unboud
+    ////double 
     
     //
        
 }
 
 
-void MyVD::read_generator_txt_file(string file_name){
+MyVD::~MyVD(){
+    
+    
+}
+
+
+void MyVD::write_edge_output_in_txt_form(string file_name){
+    ofstream fout;
+    fout.open(file_name);
+
+    for (int i = 0; i < m_edgeVector.size(); i++) {
+        MyVertex* startV = (MyVertex*)(m_edgeVector[i]->start_vertex());
+        MyVertex* endV = (MyVertex*)(m_edgeVector[i]->end_vertex());
+
+        double start_x = startV->get_point().getX();
+        double start_y = startV->get_point().getY();
+
+        double end_x = endV->get_point().getX();
+        double end_y = endV->get_point().getY();
+
+        fout << start_x << ',' << start_y << ',' << end_x << ',' << end_y << endl;
+    }
+
+    fout.close();
+}
+
+
+
+void MyVD::read_generator_txt_file_and_make_face(string file_name){
     
     ifstream file(file_name);
     
@@ -159,7 +187,7 @@ bool MyVD::compare_edge_by_FaceID_and_integrate(MyVertex* currentVertex, int lef
 }
 
 
-bool find_direction_of_vector_by_3_point(rg_Point2D vertexPT, rg_Point2D leftPT, rg_Point2D rightPT){
+bool MyVD::find_direction_of_vector_by_3_point(rg_Point2D vertexPT, rg_Point2D leftPT, rg_Point2D rightPT){
     double x1 = leftPT.getX() - vertexPT.getX();
     double y1 = leftPT.getY() - vertexPT.getY();
     
@@ -367,7 +395,7 @@ void MyVD::make_relationship_of_face(){
 }
 
 
-void MyVD::make_boundary_and_calculate_unboud(double boundary_value){
+void MyVD::make_boundary_and_calculate_unbound(double boundary_value){
     rg_Point2D boundaryPoint1 = rg_Point2D(boundary_value, boundary_value);
     rg_Point2D boundaryPoint2 = rg_Point2D(-boundary_value, boundary_value);
     rg_Point2D boundaryPoint3 = rg_Point2D(-boundary_value, -boundary_value);
@@ -385,6 +413,7 @@ void MyVD::make_boundary_and_calculate_unboud(double boundary_value){
     
     MyBoundaryPolygon* boundary = new MyBoundaryPolygon(lineList, 2 * boundary_value);
     
+    calculate_unboud_with_boundary(boundary, boundary_value);
     
 }
 
@@ -403,19 +432,42 @@ void MyVD::calculate_unboud_with_boundary(MyBoundaryPolygon* boundary, double bo
                     unboundedEdge->set_end_vertex(newVertex);
                 }
                 else if(unboundedEdge->start_vertex() == nullptr){
-                    unboundedEdge->set_start_vertex(newPoint);
+                    unboundedEdge->set_start_vertex(newVertex);
                 }                
             }
             
             else{
                 std::cout <<"gg"<<endl;
                 
+                if(unboundedEdge->end_vertex() == nullptr){
+                    if(unboundedEdge->get_direction() == true){
+                        *newPoint = ((MyVertex*)(unboundedEdge->start_vertex()))->get_point() + 2 * boundary_value * unboundedEdge->get_vector();
+                    }
+                    else if (unboundedEdge->get_direction() == false) {
+                        *newPoint = ((MyVertex*)(unboundedEdge->start_vertex()))->get_point() - 2 * boundary_value * unboundedEdge->get_vector();
+                    }
+                    MyVertex* newVertex = new MyVertex(*newPoint);
+                    unboundedEdge->set_end_vertex(newVertex);
+                }
                 
+                else if(unboundedEdge->start_vertex() == nullptr){
+                    if(unboundedEdge->get_direction() == true){
+                        *newPoint = ((MyVertex*)(unboundedEdge->end_vertex()))->get_point() + 2 * boundary_value * unboundedEdge->get_vector();
+                    }
+                    else if (unboundedEdge->get_direction() == false) {
+                        *newPoint = ((MyVertex*)(unboundedEdge->end_vertex()))->get_point() - 2 * boundary_value * unboundedEdge->get_vector();
+                    }
+                    MyVertex* newVertex = new MyVertex(*newPoint);
+                    unboundedEdge->set_end_vertex(newVertex);
+                }               
                 
             }
         }
     }
 }
+
+
+
 
 
 void MyVD::make_vertex_and_edge_by_making_inner_circle(){    
@@ -454,14 +506,11 @@ void MyVD::make_vertex_and_edge_by_making_inner_circle(){
                     bool isnew3 = compare_edge_by_FaceID_and_integrate(currentVertex, i, k);                    
                     if(isnew3){
                         make_new_edge_by_each_face_and_vertex_information(currentVertex, i, k, isObtuse, maxLeft, maxRight);                        
-                    } 
+                    }      
                     
-                    
-                }         
-                
-                
+                }               
             }
         }    
-    }   
+    }  
     
 }
