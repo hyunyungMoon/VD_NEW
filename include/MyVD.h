@@ -29,7 +29,7 @@ private:
     vector<MyVertex*> m_vertexVector;
     vector<rg_Circle2D> m_circleVector;
     
-    int m_circleIndex = 0;
+    int m_circleIndex = -1;
     vector<MyEdge*> m_edgeVector;
 
     vector<vector<MyEdge*>> m_edgeVectorOfVertexVector;    

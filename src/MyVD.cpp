@@ -219,7 +219,7 @@ void MyVD::make_new_edge_by_each_face_and_vertex_information(MyVertex* currentVe
     m_edgeVector.push_back(NewEdge);
     currentVertex->set_first_edge(NewEdge);
     m_edgeVectorOfVertexVector[m_circleIndex].push_back(NewEdge);
-    NewEdge->set_vector( (m_faceVector[leftFaceID]->get_generator() + m_faceVector[rightFaceID]->get_generator() / 2 - currentVertex->get_point()).getUnitVector() );
+    NewEdge->set_vector( ( ( m_faceVector[leftFaceID]->get_generator() + m_faceVector[rightFaceID]->get_generator() ) / 2 - currentVertex->get_point() ).getUnitVector() );
     
     if(isObtuse && leftFaceID == maxLeft && rightFaceID == maxRight){
         NewEdge->set_direction(false);
@@ -458,7 +458,7 @@ void MyVD::calculate_unboud_with_boundary(MyBoundaryPolygon* boundary, double bo
                         *newPoint = ((MyVertex*)(unboundedEdge->end_vertex()))->get_point() - 2 * boundary_value * unboundedEdge->get_vector();
                     }
                     MyVertex* newVertex = new MyVertex(*newPoint);
-                    unboundedEdge->set_end_vertex(newVertex);
+                    unboundedEdge->set_start_vertex(newVertex);
                 }               
                 
             }
@@ -481,11 +481,13 @@ void MyVD::make_vertex_and_edge_by_making_inner_circle(){
                 currentCircle.setRadius(r);                
                 
                 if(check_valid_circle(currentCircle) == false){
-                    break;
+                    continue;
                 }                
                 
                 else{
                     MyVertex* currentVertex = make_vertex_by_valid_circle(currentCircle);
+                    
+                    
 
                     int maxLeft = 0;
                     int maxRight = 0;
