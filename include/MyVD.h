@@ -20,20 +20,21 @@ using std::string;
 class MyVD {
 
 private:
+    vector<rg_Point2D>      m_generatorList;
+
     WingedEdgeDataStructure m_wingededge;    
     
-    vector<rg_Point2D> m_generatorList;
-    vector<MyFace*> m_faceVector;
-    
-    int m_faceIndex = 0;
-    vector<MyVertex*> m_vertexVector;
-    vector<rg_Circle2D> m_circleVector;
-    
-    int m_circleIndex = -1;
-    vector<MyEdge*> m_edgeVector;
+    vector<MyFace*>         m_faceVector;
+    vector<MyEdge*>         m_edgeVector;
+    vector<MyVertex*>       m_vertexVector;
 
-    vector<vector<MyEdge*>> m_edgeVectorOfVertexVector;    
+
+    //temporarily used.
+    int m_faceIndex    = 0;
+    int m_circleIndex = -1;
     
+    vector<vector<MyEdge*>> m_edgeVectorOfVertexVector;    
+    vector<rg_Circle2D>     m_circleVector;
 public: 
 
 

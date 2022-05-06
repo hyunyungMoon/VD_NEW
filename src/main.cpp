@@ -8,6 +8,13 @@ int main(int, char**) {
     
     VD100.write_edge_output_in_txt_form("./../../data/output/voronoi_output5000.txt");
     
+    
+    VoronoiDiagram2D VD_D2;
+    VD_D2.construct(fileName, 6000);
+    //VD_D2.construct(list<rg_Point>);
+    VD_D2.write_edge(fileNameForEdges);
+    
+    
     std::cout << "finish" << std::endl;
     return 0;
     

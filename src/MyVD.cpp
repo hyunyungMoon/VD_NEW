@@ -7,6 +7,22 @@ MyVD::MyVD(){
 
 MyVD::MyVD(string file_name){
 
+    list<rg_Point> inputPoints = read_input_file();
+    
+    list<Generator2D> inputGenerators = create_generators(inputPoints);
+
+    m_faceVector = create_Voronoi_faces(inputGenerators);
+    
+    create_Voronoi_vertex_by_making_and_testing_tangent_circle_by_three_generators();
+    
+    create_Voronoi_edges_and_link_btw_them();
+    
+    fill_first_edge_of_Voronoi_faces();
+    
+    
+    
+    
+    
     read_generator_txt_file_and_make_face(file_name);
     
     make_vertex_and_edge_by_making_inner_circle();
